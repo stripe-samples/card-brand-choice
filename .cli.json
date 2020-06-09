@@ -1,0 +1,11 @@
+{
+  "name": "card-brand-choice",
+  "configureDotEnv": true,
+  "integrations": [
+    {
+      "name": "main",
+      "clients": ["web"],
+      "servers": ["java", "node", "php-slim", "python", "ruby", "typescript"]
+    }
+  ]
+}
