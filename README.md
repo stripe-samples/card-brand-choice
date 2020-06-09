@@ -15,7 +15,7 @@ To be compliant, you should modify your checkout form to include a way for custo
 ## Demo
 
 * [Try it out](https://tkzim.sse.codesandbox.io/)
-* [Fork on CodSandbox](https://codesandbox.io/s/github/stripe-samples/{your-sample}/tree/codesandbox/)
+* [Fork on CodeSandbox](https://codesandbox.io/s/github/stripe-samples/card-brand-choice/tree/codesandbox/)
 
 The demo is running in test mode. Use the following test card numbers with any CVC + future expiration date:
 
