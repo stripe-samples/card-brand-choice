@@ -12,6 +12,18 @@ The PaymentIntents API enables merchants to follow a customer’s preferred card
 
 To be compliant, you should modify your checkout form to include a way for customers to specify their preferred brand. This is currently not included in Elements so you will need to create this component yourself.
 
+## Demo
+
+* [Try it out](https://tkzim.sse.codesandbox.io/)
+* [Fork on CodSandbox](https://codesandbox.io/s/github/stripe-samples/{your-sample}/tree/codesandbox/)
+
+The demo is running in test mode. Use the following test card numbers with any CVC + future expiration date:
+
+* Visa: `4242 4242 4242 4242` 
+* Mastercard: `5555 5555 5555 4444` 
+* Cartes Bancaires/Visa: `4000 0025 0000 1001` 
+* Cartes Bancaires/Mastercard: `5555 5525 0000 1001` 
+
 <img src="./card-brand-choice-sample.gif" alt="Preview of sample" align="center">
 
 This sample demonstrates how you can 
