@@ -1,6 +1,6 @@
 # Supporting Card Brand Choice with Elements
 
-## What is card brand choice? 
+## What is card brand choice?
 
 Since June 2016, EU regulation mandates merchants and acquirers to follow consumers card brand choice for payments made with co-badged cards (e.g., card branded both with Visa/MC and a local scheme such as Cartes Bancaires). In practice, this means that merchants must enable consumers to select their preferred brand in a payment form. Merchants can set a default brand choice as long as they give consumers the option to change that choice.
 
@@ -19,18 +19,18 @@ To be compliant, you should modify your checkout form to include a way for custo
 
 The demo is running in test mode. Use the following test card numbers with any CVC + future expiration date:
 
-* Visa: `4242 4242 4242 4242` 
-* Mastercard: `5555 5555 5555 4444` 
-* Cartes Bancaires/Visa: `4000 0025 0000 1001` 
-* Cartes Bancaires/Mastercard: `5555 5525 0000 1001` 
+* Visa: `4242 4242 4242 4242`
+* Mastercard: `5555 5555 5555 4444`
+* Cartes Bancaires/Visa: `4000 0025 0000 1001`
+* Cartes Bancaires/Mastercard: `5555 5525 0000 1001`
 
 <img src="./card-brand-choice-sample.gif" alt="Preview of sample" align="center">
 
-This sample demonstrates how you can 
+This sample demonstrates how you can
 
 * Pompt your customer to select a card brand
 * Dynamically udpate the card brand selection using the CardElement's `onChange` event
-* Select the card brand when using `confirmCardPayment` 
+* Select the card brand when using `confirmCardPayment`
 
 ## How to run locally
 
@@ -48,7 +48,7 @@ If you haven't already installed the CLI, follow the [installation steps](https:
 
 In your terminal shell, run the Stripe CLI command to clone the sample:
 
-``` 
+```
 stripe samples create card-brand-choice
 ```
 
@@ -58,19 +58,19 @@ The CLI will walk you through picking your integration type, server and client l
 
 If you do not want to use the Stripe CLI, you can manually clone and configure the sample yourself:
 
-``` 
+```
 git clone https://github.com/stripe-samples/card-brand-choice
 ```
 
 Copy the .env.example file into a file named .env in the folder of the server you want to use. For example:
 
-``` 
+```
 cp .env.example server/node/.env
 ```
 
 You will need a Stripe account in order to run the demo. Once you set up your account, go to the Stripe [developer dashboard](https://stripe.com/docs/development/quickstart#api-keys) to find your API keys.
 
-``` 
+```
 STRIPE_PUBLISHABLE_KEY=<replace-with-your-publishable-key>
 STRIPE_SECRET_KEY=<replace-with-your-secret-key>
 ```
@@ -83,7 +83,7 @@ Pick the server language you want and follow the instructions in the server fold
 
 For example, if you want to run the Node server:
 
-``` 
+```
 cd server/node # there's a README in this folder with instructions
 npm install
 npm start
@@ -95,7 +95,7 @@ If you want to test the `using-webhooks` integration with a local webhook on you
 
 Make sure to [install the CLI](https://stripe.com/docs/stripe-cli) and [link your Stripe account](https://stripe.com/docs/stripe-cli#link-account).
 
-``` 
+```
 stripe listen --forward-to localhost:4242/webhook
 ```
 
@@ -115,7 +115,7 @@ A: We chose the most minimal framework to convey the key Stripe calls and concep
 If you found a bug or want to suggest a new [feature/use case/sample], please [file an issue](../../issues).
 
 If you have questions, comments, or need help with code, we're here to help:
-- on [IRC via freenode](https://webchat.freenode.net/?channel=#stripe)
+- on [Discord](https://stripe.com/go/developer-chat)
 - on Twitter at [@StripeDev](https://twitter.com/StripeDev)
 - on Stack Overflow at the [stripe-payments](https://stackoverflow.com/tags/stripe-payments/info) tag
 - by [email](mailto:support+github@stripe.com)
