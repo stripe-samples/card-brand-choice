@@ -28,8 +28,8 @@ The demo is running in test mode. Use the following test card numbers with any C
 
 This sample demonstrates how you can
 
-* Pompt your customer to select a card brand
-* Dynamically udpate the card brand selection using the CardElement's `onChange` event
+* Prompt your customer to select a card brand
+* Dynamically update the card brand selection using the CardElement's `onChange` event
 * Select the card brand when using `confirmCardPayment`
 
 ## How to run locally
@@ -75,7 +75,7 @@ STRIPE_PUBLISHABLE_KEY=<replace-with-your-publishable-key>
 STRIPE_SECRET_KEY=<replace-with-your-secret-key>
 ```
 
-`STATIC_DIR` tells the server where to the client files are located and does not need to be modified unless you move the server files.
+`STATIC_DIR` tells the server where the client files are located and does not need to be modified unless you move the server files.
 
 **2. Follow the server instructions on how to run:**
 
