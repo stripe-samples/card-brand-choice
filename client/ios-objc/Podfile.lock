@@ -1,0 +1,39 @@
+PODS:
+  - DownPicker (0.1.34)
+  - Stripe (21.13.0):
+    - Stripe/Stripe3DS2 (= 21.13.0)
+    - StripeApplePay (= 21.13.0)
+    - StripeCore (= 21.13.0)
+    - StripeUICore (= 21.13.0)
+  - Stripe/Stripe3DS2 (21.13.0):
+    - StripeApplePay (= 21.13.0)
+    - StripeCore (= 21.13.0)
+    - StripeUICore (= 21.13.0)
+  - StripeApplePay (21.13.0):
+    - StripeCore (= 21.13.0)
+  - StripeCore (21.13.0)
+  - StripeUICore (21.13.0):
+    - StripeCore (= 21.13.0)
+
+DEPENDENCIES:
+  - DownPicker
+  - Stripe
+
+SPEC REPOS:
+  trunk:
+    - DownPicker
+    - Stripe
+    - StripeApplePay
+    - StripeCore
+    - StripeUICore
+
+SPEC CHECKSUMS:
+  DownPicker: c00ea63f08ae82116cc93d0eba74e86bf3d4c68e
+  Stripe: 1c350569f719f194d1a58a9564279d236d72c942
+  StripeApplePay: 2ec807acb7f95e948d430e50aa49b6b04475f1a5
+  StripeCore: a855a2f0d2d478afd9c2a3daccfbe6df6708fcc0
+  StripeUICore: a7e450146986fab95293b0164dd37dda7994982b
+
+PODFILE CHECKSUM: f782043acc2e8fe95b60b705a2b78da0ed064fc6
+
+COCOAPODS: 1.11.3
