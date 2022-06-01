@@ -8,11 +8,22 @@ Since June 2016, EU regulation mandates merchants and acquirers to follow consum
 
 The PaymentIntents API enables merchants to follow a customer’s preferred card brand choice if specified. If a preferred choice is not specified by the customer, you instruct us to select one based on optimizing for authorization rate.
 
-## Elements and Stripe.js
+## Stripe Elements and SDKs
 
-To be compliant, you should modify your checkout form to include a way for customers to specify their preferred brand. This is currently not included in Elements so you will need to create this component yourself.
+To be compliant, you should modify your checkout form to include a way for customers to specify their preferred brand. This is currently not included in Elements and SDKs so you will need to create this component yourself.
 
-## Demo
+## Sample clients
+
+This repository contains the Card Brand Choice client sample code written in:
+- [HTML+JS](client/html)
+- [Android Kotlin](client/android-kotlin)
+- [Android Java](client/android-java)
+- [IOS Swift](client/ios-swift)
+- [IOS Objective-C](client/ios-objc)
+
+Go to the corresponding folder and follow the instruction in the README.md within the folder to run the client code.
+
+## Web Demo
 
 * [Try it out](https://tkzim.sse.codesandbox.io/)
 * [Fork on CodeSandbox](https://codesandbox.io/s/github/stripe-samples/card-brand-choice/tree/codesandbox/)
@@ -32,7 +43,7 @@ This sample demonstrates how you can
 * Dynamically update the card brand selection using the CardElement's `onChange` event
 * Select the card brand when using `confirmCardPayment`
 
-## How to run locally
+## How to run server locally
 
 This sample includes 5 server implementations in Node, Ruby, Python, Java, and PHP.
 
@@ -75,7 +86,9 @@ STRIPE_PUBLISHABLE_KEY=<replace-with-your-publishable-key>
 STRIPE_SECRET_KEY=<replace-with-your-secret-key>
 ```
 
-`STATIC_DIR` tells the server where the client files are located and does not need to be modified unless you move the server files.
+`STATIC_DIR` tells the server where the client files are located and should be modified to match the client you wish to run.
+
+For example, to let the HTML+JS client work in this approach, `STATIC_DIR` should be set to `../../client/html`
 
 **2. Follow the server instructions on how to run:**
 
@@ -124,4 +137,9 @@ Sign up to [stay updated with developer news](https://go.stripe.global/dev-diges
 
 ## Author(s)
 
+@aliaso-stripe
 @baz-stripe
+@josegranjamartinez-stripe
+@kyang-stripe
+@leochen-stripe
+@ninabecx-stripe
