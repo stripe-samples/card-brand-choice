@@ -14,7 +14,7 @@ $app = new \Slim\App;
 
 // For demo purposes we're hardcoding the amount and currency here.
 // Replace this with your own inventory/cart/order logic.
-$purchase = ['amount' => 1099, 'currency' => 'USD'];
+$purchase = ['amount' => 1099, 'currency' => 'EUR'];
 
 function createPurchase($items)
 {

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="network_cards">
+        <item></item>
+        <item>American Express</item>
+        <item>Cartes Bancaires</item>
+        <item>China UnionPay</item>
+        <item>Diners Club</item>
+        <item>Discover</item>
+        <item>JCB</item>
+        <item>Mastercard</item>
+        <item>Visa</item>
+    </string-array>
+
+    <string-array name="network_cards_values">
+        <item></item>
+        <item>amex</item>
+        <item>cartes_bancaires</item>
+        <item>unionpay</item>
+        <item>diners</item>
+        <item>discover</item>
+        <item>jcb</item>
+        <item>mastercard</item>
+        <item>visa</item>
+    </string-array>
+</resources>

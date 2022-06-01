@@ -16,7 +16,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
 // Replace this with your own inventory/cart/order logic.
 const purchase = {
   amount: 1099 as const,
-  currency: "USD" as const
+  currency: "EUR" as const
 };
 
 const createPurchase = (
@@ -63,12 +63,8 @@ app.post(
     res: express.Response
   ): Promise<express.Response | void> => {
     const {
-      name,
-      email,
       items
     }: {
-      name: string;
-      email: string;
       items: object[];
     } = req.body;
 

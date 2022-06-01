@@ -27,7 +27,7 @@ app = Flask(__name__, static_folder=static_dir,
 # Replace this with your own inventory/cart/order logic.
 purchase = {
     'amount': 1099,
-    'currency': 'USD'
+    'currency': 'EUR'
 }
 
 
