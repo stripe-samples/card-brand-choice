@@ -29,7 +29,7 @@ public class Server {
     // Replace this with your own inventory/cart/order logic.
     static final Map<String, Object> PURCHASE = new HashMap<String, Object>() {{
         put("amount", 1099L);
-        put("currency", "USD");
+        put("currency", "EUR");
     }};
 
     static Map<String, Object> createPurchase(Map<String, Object>[] items) {
@@ -40,22 +40,8 @@ public class Server {
     }
 
     static class CreateRequestBody {
-        @SerializedName("name")
-        String name;
-
-        @SerializedName("email")
-        String email;
-
         @SerializedName("items")
         Map<String, Object>[] items;
-
-        public String getName() {
-            return name;
-        }
-
-        public String getEmail() {
-            return email;
-        }
 
         public Map<String, Object>[] getItems() {
             return items;

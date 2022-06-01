@@ -16,7 +16,7 @@ set :port, 4242
 # Replace this with your own inventory/cart/order logic.
 $purchase = {
   amount: 1099,
-  currency: 'USD'
+  currency: 'EUR'
 }
 
 def create_purchase(_items)

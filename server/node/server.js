@@ -10,7 +10,7 @@ const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 // Replace this with your own inventory/cart/order logic.
 const purchase = {
   amount: 1099,
-  currency: "USD",
+  currency: "EUR",
 };
 
 const createPurchase = (items) => {
@@ -43,7 +43,7 @@ app.get("/", (req, res) => {
 });
 
 app.post("/create-payment-intent", async (req, res) => {
-  const { name, email, items } = req.body;
+  const { items } = req.body;
 
   // Create the payment details based on your logic.
   const { amount, currency } = createPurchase(items);
