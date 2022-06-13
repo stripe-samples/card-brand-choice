@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Card Brand Choice</string>
+    <string name="action_settings">Settings</string>
+    <string name="launch_card_brand_choice">Launch Card Brand Choice example</string>
+    <string name="pay">Pay</string>
+    <string name="brand_dropdown">Brand</string>
+</resources>
