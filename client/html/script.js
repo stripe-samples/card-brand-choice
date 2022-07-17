@@ -2,13 +2,23 @@
 let stripe;
 let purchase;
 let card;
+let networks = {
+  "amex": "American Express",
+  "cartes_bancaires": "Cartes Bancaires",
+  "unionpay": "China UnionPay",
+  "diners_club": "Diners Club",
+  "discover": "Discover",
+  "jcb": "JCB",
+  "mastercard": "Mastercard",
+  "visa": "Visa",
+ }; 
 
 fetch("/config")
   .then(function (result) {
     return result.json();
   })
   .then(function (data) {
-    stripe = Stripe(data.publishableKey);
+    stripe = Stripe(data.publishableKey, {betas: ['networks_change_1']});
     purchase = data.purchase;
     // Show formatted price information.
     const price = (purchase.amount / 100).toFixed(2);
@@ -60,10 +70,17 @@ function setupElements() {
     hideIcon: true,
   });
   card.mount("#card-element");
-  card.on("change", function (event) {
-    var cardBrandSelect = document.getElementById("card-brand-choice");
-    cardBrandSelect.value = event.brand;
-  });
+  card.on("networkschange", function (event) {
+    var select = document.getElementById("card-brand-choice");
+    if (event.loading === true || event.networks && event.networks.length === 0) {
+      select.options.length = 0;
+    } else {
+      for(index in event.networks) {
+        select.options[select.options.length] = new Option(networks[event.networks[index]], index);
+      }
+      select.value = 0;
+    }
+  }); 
 }
 
 async function createPaymentIntent(purchase) {
