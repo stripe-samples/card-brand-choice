@@ -25,9 +25,6 @@ Go to the corresponding folder and follow the instruction in the README.md withi
 
 ## Web Demo
 
-* [Try it out](https://tkzim.sse.codesandbox.io/)
-* [Fork on CodeSandbox](https://codesandbox.io/s/github/stripe-samples/card-brand-choice/tree/codesandbox/)
-
 The demo is running in test mode. Use the following test card numbers with any CVC + future expiration date:
 
 * Visa: `4242 4242 4242 4242`
