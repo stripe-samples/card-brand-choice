@@ -71,9 +71,10 @@ function setupElements() {
   });
   card.mount("#card-element");
   card.on("networkschange", function (event) {
+    console.log(event);
     var select = document.getElementById("card-brand-choice");
+    select.options.length = 0;
     if (event.loading === false) {
-      select.options.length = 0;
       for(index in event.networks) {
         select.options[select.options.length] = new Option(networks[event.networks[index]], index);
       }
