@@ -71,7 +71,6 @@ function setupElements() {
   });
   card.mount("#card-element");
   card.on("networkschange", function (event) {
-    console.log(event);
     var select = document.getElementById("card-brand-choice");
     select.options.length = 0;
     if (event.loading === false) {
