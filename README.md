@@ -37,7 +37,7 @@ The demo is running in test mode. Use the following test card numbers with any C
 This sample demonstrates how you can
 
 * Prompt your customer to select a card brand
-* Dynamically update the card brand selection using the CardElement's `onChange` event
+* Dynamically update the card brand selection using the CardElement's `networkschange` event
 * Select the card brand when using `confirmCardPayment`
 
 ## How to run server locally
