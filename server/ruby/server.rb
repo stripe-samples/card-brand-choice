@@ -9,7 +9,7 @@ Dotenv.load
 Stripe.api_key = ENV['STRIPE_SECRET_KEY']
 
 set :static, true
-set :public_folder, File.join(File.dirname(__FILE__), ENV['STATIC_DIR'], "html")
+set :public_folder, File.join(File.dirname(__FILE__), ENV['STATIC_DIR'])
 set :port, 4242
 
 # For demo purposes we're hardcoding the amount and currency here.

@@ -18,7 +18,7 @@ fetch("/config")
     return result.json();
   })
   .then(function (data) {
-    stripe = Stripe(data.publishableKey, {betas: ['networks_change_1']});
+    stripe = Stripe(data.publishableKey);
     purchase = data.purchase;
     // Show formatted price information.
     const price = (purchase.amount / 100).toFixed(2);

@@ -9,7 +9,7 @@ const app: express.Application = express();
 // Initialise Stripe with Typescript.
 import Stripe from "stripe";
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-  apiVersion: "2019-12-03",
+  apiVersion: "2019-12-03"
 });
 
 // For demo purposes we're hardcoding the amount and currency here.
@@ -28,7 +28,7 @@ const createPurchase = (
   return purchase;
 };
 
-app.use(express.static(resolve(process.env.STATIC_DIR, "html")));
+app.use(express.static(process.env.STATIC_DIR));
 // Only use the raw body parser for webhooks
 app.use(
   (
