@@ -72,9 +72,8 @@ function setupElements() {
   card.mount("#card-element");
   card.on("networkschange", function (event) {
     var select = document.getElementById("card-brand-choice");
-    if (event.loading === true || event.networks && event.networks.length === 0) {
+    if (event.loading === false) {
       select.options.length = 0;
-    } else {
       for(index in event.networks) {
         select.options[select.options.length] = new Option(networks[event.networks[index]], index);
       }
