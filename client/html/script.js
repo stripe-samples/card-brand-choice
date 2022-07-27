@@ -75,9 +75,9 @@ function setupElements() {
     select.options.length = 0;
     if (event.loading === false) {
       for(index in event.networks) {
-        select.options[select.options.length] = new Option(networks[event.networks[index]], index);
+        select.options[select.options.length] = new Option(networks[event.networks[index]], event.networks[index]);
       }
-      select.value = 0;
+      select.value = event.networks[0];
     }
   }); 
 }
@@ -120,7 +120,7 @@ async function confirmPaymentIntent(clientSecret) {
   if (!!cardBrand) {
     options["payment_method_options"] = {
       card: {
-        network: networks[cardBrand],
+        network: cardBrand,
       },
     };
   }
