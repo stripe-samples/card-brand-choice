@@ -6,7 +6,7 @@ let networks = {
   "amex": "American Express",
   "cartes_bancaires": "Cartes Bancaires",
   "unionpay": "China UnionPay",
-  "diners_club": "Diners Club",
+  "diners": "Diners Club",
   "discover": "Discover",
   "jcb": "JCB",
   "mastercard": "Mastercard",
@@ -90,8 +90,6 @@ async function createPaymentIntent(purchase) {
     },
     body: JSON.stringify({
       items: [purchase], // Replace with your own logic
-      name: "Jenny Rosen", // Replace with value from form
-      email: "jenny.rosen@example.com", // Replace with value from form
     }),
   }).then((res) => res.json());
 }
@@ -107,7 +105,12 @@ async function pay() {
 
 async function confirmPaymentIntent(clientSecret) {
   var options = {
-    payment_method: { card: card },
+    payment_method: {
+      card: card,
+      billing_details: {
+        name: document.getElementById("name").value,
+      }
+    },
   };
 
   // Get the selected card brand
