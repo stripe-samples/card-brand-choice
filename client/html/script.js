@@ -120,7 +120,7 @@ async function confirmPaymentIntent(clientSecret) {
   if (!!cardBrand) {
     options["payment_method_options"] = {
       card: {
-        network: cardBrand,
+        network: networks[cardBrand],
       },
     };
   }
