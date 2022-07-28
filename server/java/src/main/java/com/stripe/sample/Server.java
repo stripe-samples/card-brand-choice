@@ -54,7 +54,7 @@ public class Server {
         Stripe.apiKey = dotenv.get("STRIPE_SECRET_KEY");
 
         staticFiles.externalLocation(
-                Paths.get(Paths.get("").toAbsolutePath().toString(), dotenv.get("STATIC_DIR")).normalize().toString());
+                Paths.get(Paths.get("").toAbsolutePath().toString(), dotenv.get("STATIC_DIR"), "web").normalize().toString());
 
         get("/config", (request, response) -> {
             response.type("application/json");

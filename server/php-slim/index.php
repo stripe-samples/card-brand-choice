@@ -42,7 +42,7 @@ $app->add(function ($request, $response, $next) {
 
 $app->get('/', function (Request $request, Response $response, array $args) {   
   // Display checkout page
-  return $response->write(file_get_contents(getenv('STATIC_DIR') . '/index.html'));
+  return $response->write(file_get_contents(getenv('STATIC_DIR') . 'web/index.html'));
 });
 
 $app->get('/config', function (Request $request, Response $response, array $args) {
