@@ -9,14 +9,14 @@ const app: express.Application = express();
 // Initialise Stripe with Typescript.
 import Stripe from "stripe";
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-  apiVersion: "2019-12-03"
+  apiVersion: "2019-12-03",
 });
 
 // For demo purposes we're hardcoding the amount and currency here.
 // Replace this with your own inventory/cart/order logic.
 const purchase = {
   amount: 1099 as const,
-  currency: "EUR" as const
+  currency: "EUR" as const,
 };
 
 const createPurchase = (
@@ -28,7 +28,7 @@ const createPurchase = (
   return purchase;
 };
 
-app.use(express.static(process.env.STATIC_DIR));
+app.use(express.static(resolve(process.env.STATIC_DIR, "web")));
 // Only use the raw body parser for webhooks
 app.use(
   (
@@ -47,7 +47,7 @@ app.use(
 app.get("/config", (_: express.Request, res: express.Response): void => {
   res.send({
     publishableKey: process.env.STRIPE_PUBLISHABLE_KEY,
-    purchase
+    purchase,
   });
 });
 
@@ -63,7 +63,7 @@ app.post(
     res: express.Response
   ): Promise<express.Response | void> => {
     const {
-      items
+      items,
     }: {
       items: object[];
     } = req.body;
@@ -72,16 +72,15 @@ app.post(
     const { amount, currency } = createPurchase(items);
 
     // Create a PaymentIntent with the purchase amount and currency.
-    const paymentIntent: Stripe.PaymentIntent = await stripe.paymentIntents.create(
-      {
+    const paymentIntent: Stripe.PaymentIntent =
+      await stripe.paymentIntents.create({
         amount,
-        currency
-      }
-    );
+        currency,
+      });
 
     // Send the PaymentIntent client_secret to the client.
     res.send({
-      clientSecret: paymentIntent.client_secret
+      clientSecret: paymentIntent.client_secret,
     });
   }
 );
