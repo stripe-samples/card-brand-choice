@@ -182,7 +182,6 @@ class CardBrandChoiceViewController: UIViewController {
         
         // Collect card details
         let cardParams = cardTextField.cardParams
-        
     
         // Collect the customer's full name to know which customer the PaymentMethod belongs to.
         let billingDetails = STPPaymentMethodBillingDetails()
@@ -190,19 +189,27 @@ class CardBrandChoiceViewController: UIViewController {
         
         // Create PaymentIntent confirm parameters with the above
         let paymentMethodParams = STPPaymentMethodParams(card: cardParams, billingDetails: billingDetails, metadata: nil)
-        
         let paymentIntentParams = STPPaymentIntentParams(clientSecret: paymentIntentClientSecret)
-
-        paymentIntentParams.paymentMethodParams = paymentMethodParams
         
-        if cardBrand != nil {
-            let confirmCardOptions = STPConfirmCardOptions()
-            let confirmPaymentMethodOptions = STPConfirmPaymentMethodOptions()
-            confirmCardOptions.network = cardBrand
-            confirmPaymentMethodOptions.cardOptions = confirmCardOptions
-            paymentIntentParams.paymentMethodOptions = confirmPaymentMethodOptions
+        STPAPIClient.shared.createPaymentMethod(with: paymentMethodParams) { paymentMethod, error in
+            if let paymentMethod = paymentMethod {
+                if let availableNetworks = paymentMethod.card?.networks?.available, let network = self.cardBrand, availableNetworks.contains(network) {
+                    let confirmCardOptions = STPConfirmCardOptions()
+                    let confirmPaymentMethodOptions = STPConfirmPaymentMethodOptions()
+                    confirmCardOptions.network = network
+                    confirmPaymentMethodOptions.cardOptions = confirmCardOptions
+                    paymentIntentParams.paymentMethodOptions = confirmPaymentMethodOptions
+                }
+                paymentIntentParams.paymentMethodId = paymentMethod.stripeId
+                self.confirmPayment(sender: sender, paymentIntentParams: paymentIntentParams)
+                return;
+            }
+            self.displayAlert(title: "Payment method creation failed", message: error?.localizedDescription ?? "")
         }
-        
+    }
+    
+    @objc
+    func confirmPayment(sender: UIButton, paymentIntentParams: STPPaymentIntentParams) {
         // Complete the payment
         let paymentHandler = STPPaymentHandler.shared()
         paymentHandler.confirmPayment(paymentIntentParams, with: self) { status, paymentIntent, error in
