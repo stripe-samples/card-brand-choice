@@ -6,8 +6,11 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import com.example.app.databinding.CardActivityBinding
+import com.stripe.android.ApiResultCallback
 import com.stripe.android.PaymentConfiguration
+import com.stripe.android.Stripe
 import com.stripe.android.model.ConfirmPaymentIntentParams
+import com.stripe.android.model.PaymentMethod
 import com.stripe.android.model.PaymentMethodOptionsParams
 import com.stripe.android.payments.paymentlauncher.PaymentLauncher
 import com.stripe.android.payments.paymentlauncher.PaymentResult
@@ -17,6 +20,7 @@ import com.stripe.android.view.CardValidCallback
 class CardBrandChoiceActivity : AppCompatActivity() {
 
     private lateinit var paymentLauncher: PaymentLauncher
+    private lateinit var stripe: Stripe
     private lateinit var binding: CardActivityBinding
     private var cardBrand: String? = null
     private lateinit var paymentIntentClientSecret: String
@@ -37,6 +41,10 @@ class CardBrandChoiceActivity : AppCompatActivity() {
             paymentConfiguration.publishableKey,
             paymentConfiguration.stripeAccountId,
             ::onPaymentResult
+        )
+        stripe = Stripe(
+            applicationContext,
+            paymentConfiguration.publishableKey
         )
     }
 
@@ -81,19 +89,38 @@ class CardBrandChoiceActivity : AppCompatActivity() {
 
         // binding the submit button
         binding.payButton.setOnClickListener {
-            val paymentMethodOptions = PaymentMethodOptionsParams.Card(null, cardBrand)
             binding.cardInputWidget.paymentMethodCreateParams?.let { myParams ->
-                val confirmParams = ConfirmPaymentIntentParams
-                    .createWithPaymentMethodCreateParams(
-                        paymentMethodCreateParams = myParams,
-                        clientSecret = paymentIntentClientSecret,
-                        paymentMethodOptions = paymentMethodOptions
-                    )
-                // give UI feedback and prevent re-submit
-                binding.payButton.isEnabled = false
-                paymentLauncher.confirm(confirmParams)
+                stripe.createPaymentMethod(
+                    myParams,
+                    callback = object : ApiResultCallback<PaymentMethod> {
+                        override fun onSuccess(paymentMethod: PaymentMethod) {
+                            confirmPayment(paymentIntentClientSecret, paymentMethod)
+                        }
+
+                        override fun onError(error: Exception) {
+                            AlertManager.displayAlert(
+                                this@CardBrandChoiceActivity,
+                                "Failed to create payment method",
+                                "Error: $error",
+                                )
+                        }
+                    }
+                )
             }
         }
+    }
+
+    private fun confirmPayment(paymentIntentClientSecret: String, paymentMethod: PaymentMethod) {
+        val confirmParams = ConfirmPaymentIntentParams.createWithPaymentMethodId(
+            paymentMethod.id!!, paymentIntentClientSecret
+        )
+        if (cardBrand != null) {
+            val paymentMethodOptions = PaymentMethodOptionsParams.Card(null, cardBrand)
+            confirmParams.paymentMethodOptions = paymentMethodOptions
+        }
+        // give UI feedback and prevent re-submit
+        binding.payButton.isEnabled = false
+        paymentLauncher.confirm(confirmParams)
     }
 
     private fun createIntent() {

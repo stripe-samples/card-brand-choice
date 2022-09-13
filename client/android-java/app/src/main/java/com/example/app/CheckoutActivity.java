@@ -10,17 +10,21 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.stripe.android.ApiResultCallback;
 import com.stripe.android.PaymentConfiguration;
 import com.stripe.android.model.CardParams;
 import com.stripe.android.model.ConfirmPaymentIntentParams;
+import com.stripe.android.model.PaymentMethod;
 import com.stripe.android.model.PaymentMethodCreateParams;
 import com.stripe.android.model.PaymentMethodOptionsParams;
 import com.stripe.android.payments.paymentlauncher.PaymentLauncher;
 import com.stripe.android.payments.paymentlauncher.PaymentResult;
 import com.stripe.android.view.CardInputWidget;
 import com.stripe.android.view.CardValidCallback;
+import com.stripe.android.Stripe;
 
 import java.util.Arrays;
 import java.util.Set;
@@ -28,6 +32,7 @@ import java.util.Set;
 public class CheckoutActivity extends AppCompatActivity {
     private final int spinnerEmptyElementIndex = 0;
     private PaymentLauncher paymentLauncher;
+    private Stripe stripe;
     private CardInputWidget cardInputWidget;
     private boolean cardInputWidgetValid = false;
     private ProgressBar progressBar;
@@ -54,6 +59,10 @@ public class CheckoutActivity extends AppCompatActivity {
                 paymentConfiguration.getPublishableKey(),
                 paymentConfiguration.getStripeAccountId(),
                 this::onPaymentResult
+        );
+        stripe = new Stripe(
+                getApplicationContext(),
+                paymentConfiguration.getPublishableKey()
         );
 
         cardInputWidget.setPostalCodeEnabled(false);
@@ -109,8 +118,6 @@ public class CheckoutActivity extends AppCompatActivity {
     private void onPaymentButtonClick(View view) {
         final String paymentIntentClientSecret;
         final PaymentMethodCreateParams createParams;
-        final PaymentMethodOptionsParams methodParams;
-        final ConfirmPaymentIntentParams confirmParams;
 
         startPaymentProgressDisplay();
 
@@ -119,13 +126,41 @@ public class CheckoutActivity extends AppCompatActivity {
                 displayAlert("Backend error", "failed to create PaymentIntent: " + paymentIntentFactory.getError(), (dialog, which) -> this.finish());
                 return;
             }
-            methodParams = new PaymentMethodOptionsParams.Card(null, getSelectedBrandCode(), null, null);
-            confirmParams = ConfirmPaymentIntentParams.createWithPaymentMethodCreateParams(createParams, paymentIntentClientSecret);
-            confirmParams.setPaymentMethodOptions(methodParams);
-            paymentLauncher.confirm(confirmParams);
+            stripe.createPaymentMethod(
+                    createParams,
+                    new ApiResultCallback<PaymentMethod>() {
+                        @Override
+                        public void onSuccess(@NonNull PaymentMethod paymentMethod) {
+                            confirmPayment(paymentIntentClientSecret, paymentMethod);
+                        }
+
+                        @Override
+                        public void onError(@NonNull Exception e) {
+                            stopPaymentProgressDisplay();
+                        }
+                    }
+            );
         } else {
             stopPaymentProgressDisplay();
         }
+    }
+
+    private void confirmPayment(String paymentIntentClientSecret, PaymentMethod paymentMethod) {
+        final String network;
+        final Set<String> availableNetworks;
+        final PaymentMethodOptionsParams methodParams;
+        final ConfirmPaymentIntentParams confirmParams;
+
+        confirmParams = ConfirmPaymentIntentParams.createWithPaymentMethodId(paymentMethod.id, paymentIntentClientSecret);
+        if (
+                (availableNetworks = paymentMethod.card.networks.getAvailable()) != null &&
+                        (network = getSelectedBrandCode()) != null &&
+                        availableNetworks.contains(network)
+        ) {
+            methodParams = new PaymentMethodOptionsParams.Card(null, network, null, null);
+            confirmParams.setPaymentMethodOptions(methodParams);
+        }
+        paymentLauncher.confirm(confirmParams);
     }
 
     private void onCardValidityChange(boolean isValid, Set<? extends CardValidCallback.Fields> invalidFields) {

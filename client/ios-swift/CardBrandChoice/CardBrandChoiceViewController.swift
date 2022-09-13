@@ -205,6 +205,8 @@ class CardBrandChoiceViewController: UIViewController {
                 return;
             }
             self.displayAlert(title: "Payment method creation failed", message: error?.localizedDescription ?? "")
+            sender.setTitle("Pay", for: .normal)
+            sender.isEnabled = true
         }
     }
     
