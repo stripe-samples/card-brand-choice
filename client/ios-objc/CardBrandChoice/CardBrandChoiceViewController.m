@@ -193,23 +193,39 @@ NSString *const BackendUrl = @"http://127.0.0.1:4242/";
 
     [self.payButton setTitle:@"Paying..." forState:UIControlStateNormal];
     self.payButton.enabled = NO;
+    
+    // Set customer details
+    STPPaymentMethodBillingDetails *billingDetails = [[STPPaymentMethodBillingDetails alloc] init];
+    billingDetails.name = @"Jenny Rosen";
 
     // Collect card details on the client
     STPPaymentMethodCardParams *cardParams = self.cardTextField.cardParams;
-    STPPaymentMethodParams *paymentMethodParams = [STPPaymentMethodParams paramsWithCard:cardParams billingDetails:nil metadata:nil];
-
-    // Set PaymentMethod details (Card options + network) on the Payment Intent
+    STPPaymentMethodParams *paymentMethodParams = [STPPaymentMethodParams paramsWithCard:cardParams billingDetails:billingDetails metadata:nil];
     STPPaymentIntentParams *paymentIntentParams = [[STPPaymentIntentParams alloc] initWithClientSecret:self.paymentIntentClientSecret];
-    paymentIntentParams.paymentMethodParams = paymentMethodParams;
 
-    STPConfirmPaymentMethodOptions *paymentMethodOptions = [[STPConfirmPaymentMethodOptions alloc] init];
-    paymentIntentParams.paymentMethodOptions = paymentMethodOptions;
+    [STPAPIClient.sharedClient createPaymentMethodWithParams:paymentMethodParams completion:^(STPPaymentMethod *paymentMethod, NSError *handleActionError) {
+        if (paymentMethod) {
+            NSArray *availableNetworks = paymentMethod.card.networks.available;
+            NSString *network = [self brandMap][self.dropdownTextField.text];
+            if ([availableNetworks containsObject:network]) {
+                STPConfirmCardOptions *cardOptions =  [[STPConfirmCardOptions alloc] init];
+                STPConfirmPaymentMethodOptions *paymentMethodOptions = [[STPConfirmPaymentMethodOptions alloc] init];
+                cardOptions.network = network;
+                paymentMethodOptions.cardOptions = cardOptions;
+                paymentIntentParams.paymentMethodOptions = paymentMethodOptions;
+            }
+            paymentIntentParams.paymentMethodId = paymentMethod.stripeId;
+            [self confirmPayment:paymentIntentParams];
+            return;
+        }
+        // For demo purposes, we expose the descriptive error message from the Stripe API
+        [self displayAlertWithTitle:@"Payment method creation failed" message:handleActionError.userInfo[@"com.stripe.lib:ErrorMessageKey"] ?: @"" restartDemo:NO];
+        [self.payButton setTitle:@"Pay" forState:UIControlStateNormal];
+        self.payButton.enabled = YES;
+    }];
+}
 
-    STPConfirmCardOptions *cardOptions =  [[STPConfirmCardOptions alloc] init];
-    cardOptions.network = [self brandMap][self.dropdownTextField.text];
-
-    paymentMethodOptions.cardOptions = cardOptions;
-
+- (void)confirmPayment:(STPPaymentIntentParams *)paymentIntentParams {
     // Complete the payment
     STPPaymentHandler *paymentHandler = [STPPaymentHandler sharedHandler];
     [paymentHandler confirmPayment:paymentIntentParams withAuthenticationContext:self completion:^(STPPaymentHandlerActionStatus status, STPPaymentIntent *paymentIntent, NSError *handleActionError) {
