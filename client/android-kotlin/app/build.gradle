@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
 android {
-    compileSdkVersion 31
+    compileSdkVersion 33
 
     buildFeatures {
         viewBinding = true
@@ -12,7 +12,7 @@ android {
     defaultConfig {
         applicationId "com.example.app"
         minSdkVersion 21
-        targetSdkVersion 31
+        targetSdkVersion 33
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -43,7 +43,7 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.1'
 
     // Stripe Android SDK
-    implementation 'com.stripe:stripe-android:20.3.0'
+    implementation 'com.stripe:stripe-android:20.13.0'
 
     // OkHttp & GSON
     implementation 'com.squareup.okhttp3:okhttp:4.2.0'
