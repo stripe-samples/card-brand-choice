@@ -44,7 +44,8 @@ class CardBrandChoiceActivity : AppCompatActivity() {
         )
         stripe = Stripe(
             applicationContext,
-            paymentConfiguration.publishableKey
+            paymentConfiguration.publishableKey,
+            paymentConfiguration.stripeAccountId
         )
     }
 
@@ -89,9 +90,9 @@ class CardBrandChoiceActivity : AppCompatActivity() {
 
         // binding the submit button
         binding.payButton.setOnClickListener {
-            binding.cardInputWidget.paymentMethodCreateParams?.let { myParams ->
+            binding.cardInputWidget.paymentMethodCreateParams?.let { paymentMethodCreateParams ->
                 stripe.createPaymentMethod(
-                    myParams,
+                    paymentMethodCreateParams,
                     callback = object : ApiResultCallback<PaymentMethod> {
                         override fun onSuccess(paymentMethod: PaymentMethod) {
                             confirmPayment(paymentIntentClientSecret, paymentMethod)
@@ -111,16 +112,17 @@ class CardBrandChoiceActivity : AppCompatActivity() {
     }
 
     private fun confirmPayment(paymentIntentClientSecret: String, paymentMethod: PaymentMethod) {
-        val confirmParams = ConfirmPaymentIntentParams.createWithPaymentMethodId(
+        val paymentIntentParams = ConfirmPaymentIntentParams.createWithPaymentMethodId(
             paymentMethod.id!!, paymentIntentClientSecret
         )
-        if (cardBrand != null) {
+        val availableNetworks = paymentMethod.card?.networks?.available
+        if (availableNetworks != null && cardBrand != null && availableNetworks.contains(cardBrand)) {
             val paymentMethodOptions = PaymentMethodOptionsParams.Card(null, cardBrand)
-            confirmParams.paymentMethodOptions = paymentMethodOptions
+            paymentIntentParams.paymentMethodOptions = paymentMethodOptions
         }
         // give UI feedback and prevent re-submit
         binding.payButton.isEnabled = false
-        paymentLauncher.confirm(confirmParams)
+        paymentLauncher.confirm(paymentIntentParams)
     }
 
     private fun createIntent() {

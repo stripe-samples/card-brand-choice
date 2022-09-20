@@ -194,11 +194,11 @@ class CardBrandChoiceViewController: UIViewController {
         STPAPIClient.shared.createPaymentMethod(with: paymentMethodParams) { paymentMethod, error in
             if let paymentMethod = paymentMethod {
                 if let availableNetworks = paymentMethod.card?.networks?.available, let network = self.cardBrand, availableNetworks.contains(network) {
-                    let confirmCardOptions = STPConfirmCardOptions()
-                    let confirmPaymentMethodOptions = STPConfirmPaymentMethodOptions()
-                    confirmCardOptions.network = network
-                    confirmPaymentMethodOptions.cardOptions = confirmCardOptions
-                    paymentIntentParams.paymentMethodOptions = confirmPaymentMethodOptions
+                    let cardOptions = STPConfirmCardOptions()
+                    let paymentMethodOptions = STPConfirmPaymentMethodOptions()
+                    cardOptions.network = network
+                    paymentMethodOptions.cardOptions = cardOptions
+                    paymentIntentParams.paymentMethodOptions = paymentMethodOptions
                 }
                 paymentIntentParams.paymentMethodId = paymentMethod.stripeId
                 self.confirmPayment(sender: sender, paymentIntentParams: paymentIntentParams)

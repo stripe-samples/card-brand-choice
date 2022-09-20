@@ -203,12 +203,12 @@ NSString *const BackendUrl = @"http://127.0.0.1:4242/";
     STPPaymentMethodParams *paymentMethodParams = [STPPaymentMethodParams paramsWithCard:cardParams billingDetails:billingDetails metadata:nil];
     STPPaymentIntentParams *paymentIntentParams = [[STPPaymentIntentParams alloc] initWithClientSecret:self.paymentIntentClientSecret];
 
-    [STPAPIClient.sharedClient createPaymentMethodWithParams:paymentMethodParams completion:^(STPPaymentMethod *paymentMethod, NSError *handleActionError) {
+    [[STPAPIClient sharedClient] createPaymentMethodWithParams:paymentMethodParams completion:^(STPPaymentMethod *paymentMethod, NSError *handleActionError) {
         if (paymentMethod) {
             NSArray *availableNetworks = paymentMethod.card.networks.available;
             NSString *network = [self brandMap][self.dropdownTextField.text];
             if ([availableNetworks containsObject:network]) {
-                STPConfirmCardOptions *cardOptions =  [[STPConfirmCardOptions alloc] init];
+                STPConfirmCardOptions *cardOptions = [[STPConfirmCardOptions alloc] init];
                 STPConfirmPaymentMethodOptions *paymentMethodOptions = [[STPConfirmPaymentMethodOptions alloc] init];
                 cardOptions.network = network;
                 paymentMethodOptions.cardOptions = cardOptions;

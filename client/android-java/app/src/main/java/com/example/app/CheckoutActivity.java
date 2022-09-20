@@ -62,7 +62,8 @@ public class CheckoutActivity extends AppCompatActivity {
         );
         stripe = new Stripe(
                 getApplicationContext(),
-                paymentConfiguration.getPublishableKey()
+                paymentConfiguration.getPublishableKey(),
+                paymentConfiguration.getStripeAccountId()
         );
 
         cardInputWidget.setPostalCodeEnabled(false);
@@ -117,17 +118,17 @@ public class CheckoutActivity extends AppCompatActivity {
 
     private void onPaymentButtonClick(View view) {
         final String paymentIntentClientSecret;
-        final PaymentMethodCreateParams createParams;
+        final PaymentMethodCreateParams paymentMethodCreateParams;
 
         startPaymentProgressDisplay();
 
-        if ((createParams = cardInputWidget.getPaymentMethodCreateParams()) != null) {
+        if ((paymentMethodCreateParams = cardInputWidget.getPaymentMethodCreateParams()) != null) {
             if ((paymentIntentClientSecret = paymentIntentFactory.getPaymentIntentClientSecret()) == null) {
                 displayAlert("Backend error", "failed to create PaymentIntent: " + paymentIntentFactory.getError(), (dialog, which) -> this.finish());
                 return;
             }
             stripe.createPaymentMethod(
-                    createParams,
+                    paymentMethodCreateParams,
                     new ApiResultCallback<PaymentMethod>() {
                         @Override
                         public void onSuccess(@NonNull PaymentMethod paymentMethod) {
@@ -148,19 +149,16 @@ public class CheckoutActivity extends AppCompatActivity {
     private void confirmPayment(String paymentIntentClientSecret, PaymentMethod paymentMethod) {
         final String network;
         final Set<String> availableNetworks;
-        final PaymentMethodOptionsParams methodParams;
-        final ConfirmPaymentIntentParams confirmParams;
+        final PaymentMethodOptionsParams paymentMethodOptions;
+        final ConfirmPaymentIntentParams paymentIntentParams;
 
-        confirmParams = ConfirmPaymentIntentParams.createWithPaymentMethodId(paymentMethod.id, paymentIntentClientSecret);
-        if (
-                (availableNetworks = paymentMethod.card.networks.getAvailable()) != null &&
-                        (network = getSelectedBrandCode()) != null &&
-                        availableNetworks.contains(network)
-        ) {
-            methodParams = new PaymentMethodOptionsParams.Card(null, network, null, null);
-            confirmParams.setPaymentMethodOptions(methodParams);
+        paymentIntentParams = ConfirmPaymentIntentParams.createWithPaymentMethodId(paymentMethod.id, paymentIntentClientSecret);
+        availableNetworks = paymentMethod.card.networks.getAvailable();
+        if ((network = getSelectedBrandCode()) != null && availableNetworks.contains(network)) {
+            paymentMethodOptions = new PaymentMethodOptionsParams.Card(null, network, null, null);
+            paymentIntentParams.setPaymentMethodOptions(paymentMethodOptions);
         }
-        paymentLauncher.confirm(confirmParams);
+        paymentLauncher.confirm(paymentIntentParams);
     }
 
     private void onCardValidityChange(boolean isValid, Set<? extends CardValidCallback.Fields> invalidFields) {
